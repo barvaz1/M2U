@@ -19,26 +19,37 @@ class Login(Lon_in_ui):
         super().__init__()
 
     def setup(self):
-        self.pushButton_singup.clicked.connect(self.gotoSignup)
+        self.pushButton_singup.clicked.connect(self.goto_Signup)
         self.gotoSignup_signal.emit()
 
-    def gotoSignup(self):
+    def goto_Signup(self):
         self.gotoSignup_signal.emit()
 
 
 class Signup(Sign_up_ui, ):
     gotoLogin_signal = QtCore.pyqtSignal()
+    signup_signal = QtCore.pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
 
     def setup(self):
-        self.pushButton_return.clicked.connect(self.gotoSignup)
+        # setup return button
+        self.pushButton_return.clicked.connect(self.goto_login)
 
+        # set up Sign up button
+        self.pushButton_signup.clicked.connect(self.sign_up)
+
+    def goto_login(self):
         self.gotoLogin_signal.emit()
 
-    def gotoSignup(self):
-        self.gotoLogin_signal.emit()
+    def sign_up(self):
+        self.signup_signal.emit({
+            "user name" : self.user_name_lineEdit.text(),
+            "E-main" : self.email_line_edit.text(),
+            "password" : self.password_line_edit.text(),
+            "password2" : self.password_2_line_edit.text()
+        })
 
 
 class Controller:
@@ -62,8 +73,12 @@ class Controller:
         self.signup.setup()
 
         self.signup.gotoLogin_signal.connect(self.show_login_screen)
+        self.signup.signup_signal.connect(self.sign_up)
 
         self.Dialog.show()
+
+    def sign_up(self, data_dict):
+        print(data_dict)
 
     def show_login_screen(self):
         try:
@@ -84,12 +99,9 @@ class Controller:
         self.Dialog.show()
 
 
-
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
     controller = Controller()
-
 
 sys.exit(app.exec_())

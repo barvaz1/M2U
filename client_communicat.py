@@ -8,13 +8,13 @@ class Socket_controller:
         self.my_socket = socket.socket()
         self.my_socket.connect(('127.0.0.1', 80))
 
-        receve_thread = threading.Thread(target=self.receve_data, args=())
-        receve_thread.start()
+        recv_thread = threading.Thread(target=self.recv_data, args=())
+        recv_thread.start()
 
         send_thread = threading.Thread(target=self.send_data(), args=())
         send_thread.start()
 
-    def receve_data(self):
+    def recv_data(self):
         while True:
             print(self.my_socket.recv(1024).decode())
 
@@ -22,5 +22,6 @@ class Socket_controller:
         while True:
             str = input("pls enter a string: ")
             self.my_socket.send(str.encode())
+
 
 Socket_controller()
