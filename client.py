@@ -2,14 +2,17 @@ from PyQt5.QtGui import QFont
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QDialog, QApplication
-import sys
+import ast
+import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
+
 import sys
 from login import Lon_in_ui
 from signup import Sign_up_ui
+from client_communicate import Socket_controller
 
-import time
+import checkInput
 
 
 class Login(Lon_in_ui):
@@ -22,8 +25,35 @@ class Login(Lon_in_ui):
         self.pushButton_singup.clicked.connect(self.goto_Signup)
         self.gotoSignup_signal.emit()
 
+        self.lineEdit_user_name.editingFinished.connect(self.check_input)
+        self.lineEdit_password.editingFinished.connect(self.check_input)
+
     def goto_Signup(self):
         self.gotoSignup_signal.emit()
+
+    def check_input(self):
+
+        temp = 0
+        # chnge the color of the line edit
+        print("check_input")
+        if checkInput.check_user_name(self.lineEdit_user_name.text()):
+            self.lineEdit_user_name.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
+                                                  "outset;border-width: 2px;")
+            temp += 1
+        else:
+            self.lineEdit_user_name.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
+                                                  "outset;border-width: 2px;")
+
+        if checkInput.check_password(self.lineEdit_password.text()):
+            self.lineEdit_password.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
+                                                 "outset;border-width: 2px;")
+            temp += 1
+        else:
+            print(12345567890)
+            self.lineEdit_password.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
+                                                 "outset;border-width: 2px;")
+
+        return temp == 2
 
 
 class Signup(Sign_up_ui, ):
@@ -40,16 +70,70 @@ class Signup(Sign_up_ui, ):
         # set up Sign up button
         self.pushButton_signup.clicked.connect(self.sign_up)
 
+        self.user_name_lineEdit.editingFinished.connect(self.check_input)
+        self.email_line_edit.editingFinished.connect(self.check_input)
+        self.password_line_edit.editingFinished.connect(self.check_input)
+        self.password_2_line_edit.editingFinished.connect(self.check_input)
+
     def goto_login(self):
         self.gotoLogin_signal.emit()
 
     def sign_up(self):
-        self.signup_signal.emit({
-            "user name" : self.user_name_lineEdit.text(),
-            "E-main" : self.email_line_edit.text(),
-            "password" : self.password_line_edit.text(),
-            "password2" : self.password_2_line_edit.text()
-        })
+        if self. check_input():
+            self.signup_signal.emit({
+                "user name": self.user_name_lineEdit.text(),
+                "E-mail": self.email_line_edit.text(),
+                "password": self.password_line_edit.text(),
+                "password2": self.password_2_line_edit.text()
+            })
+
+    def check_input(self):
+
+        # chnge the color of the line edit
+        print("check_input")
+
+        temp = 0
+        # user name
+        if checkInput.check_user_name(self.user_name_lineEdit.text()):
+            self.user_name_lineEdit.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
+                                                  "outset;border-width: 2px;")
+            temp += 1
+        else:
+            self.user_name_lineEdit.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
+                                                  "outset;border-width: 2px;")
+
+        # user e_mail
+        if checkInput.check_email(self.email_line_edit.text()):
+            self.email_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
+                                               "outset;border-width: 2px;")
+
+            temp += 1
+        else:
+            self.email_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
+                                               "outset;border-width: 2px;")
+
+        # user password
+        if checkInput.check_password(self.password_line_edit.text()):
+            self.password_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
+                                               "outset;border-width: 2px;")
+
+            temp += 1
+        else:
+            self.password_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
+                                               "outset;border-width: 2px;")
+
+        # user password 2
+        if self.password_line_edit.text() == self.password_2_line_edit.text():
+            self.password_2_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
+                                               "outset;border-width: 2px;")
+
+            temp += 1
+        else:
+            self.password_2_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
+                                               "outset;border-width: 2px;")
+
+        print(temp)
+        return temp == 4
 
 
 class Controller:
@@ -61,9 +145,11 @@ class Controller:
 
         self.show_login_screen()
 
+        self.socket_controller = Socket_controller()
+
     def show_signup_screen(self):
-        if self.cur_screen:
-            self.cur_screen.close()
+        #        if self.cur_screen:
+        self.cur_screen.close()
 
         self.signup = Signup()
         self.cur_screen = self.signup
@@ -78,7 +164,20 @@ class Controller:
         self.Dialog.show()
 
     def sign_up(self, data_dict):
-        print(data_dict)
+        #################################################################
+        # check staff
+        #################################################################
+        # after check!
+        del data_dict["password2"]
+        data = "sign_up" + str(data_dict)
+        self.socket_controller.send_data(data)
+
+        try:
+            print(ast.literal_eval(data[7:]))
+
+        except Exception as e:
+            print(e.__str__())
+            raise
 
     def show_login_screen(self):
         try:
@@ -103,5 +202,9 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
     controller = Controller()
+
+import atexit
+
+# atexit.register(controller.socket_controller.send_data, data = "EXIT")
 
 sys.exit(app.exec_())
