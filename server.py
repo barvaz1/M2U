@@ -1,11 +1,19 @@
 import socket
 import select
+import ast
+
+
+from server_db import Controller_db
+
 
 MAX_MSG_LENGTH = 1024
 SERVER_PORT = 80
 SERVER_IP = "0.0.0.0"
 
 def main():
+
+    # start db
+    controller_db = Controller_db()
 
     # open socket with client
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,16 +46,25 @@ def main():
 
             else:
                 # get data from existing client
-                print("Data from existing client")
-                data = current_socket.recv(MAX_MSG_LENGTH).decode()
+                print("Data from existing client: ")
 
+                data = current_socket.recv(MAX_MSG_LENGTH).decode()
+                print(data)
                 # empty data?
-                if data == "":
+                if data == "" or data == "EXIT":
                     print("Connection closed", )
                     del client_sockets[current_socket]
                     current_socket.close()
 
-                # new cmd?
+                elif data[0:7] == "sign_up":
+                    #data = data[7:]
+                    print(data)
+                    data = ast.literal_eval(data[7:])
+                    print(data)
+
+                    controller_db.create_user(data["user name"], data["E-mail"], data["password"])
+
+
                 else:
 
                     messages_to_send.append((current_socket, "Data: " + data))

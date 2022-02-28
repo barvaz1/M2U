@@ -4,7 +4,7 @@ from sqlite3 import Error
 db_file = r"Users.db"
 
 
-class controller_db:
+class Controller_db:
     def __init__(self):
 
         # create a database connection to a SQLite database
@@ -51,12 +51,36 @@ class controller_db:
         self.conn.commit()
 
         cur.close()
-        # cur.lastrowid
-        # return the name(cmd) and usrName
+        return
+
+    def check_user(self, name, email, password):
+        print(self.conn)
+        sql = """ INSERT INTO USERS (
+                                  usrName,
+                                  usrEmail,
+                                  usrPWD
+                              )
+                              VALUES (
+                                  '{}',
+                                  '{}',
+                                  '{}'
+                                  ); """
+
+        sql = sql.format(name, email, password)
+
+        print(sql)
+        cur = self.conn.cursor()
+
+        count = cur.execute(sql)
+        self.conn.commit()
+
+        cur.close()
         return
 
 
+
+
 if __name__ == '__main__':
-    x = controller_db()
+    x = Controller_db()
     x.create_user_tabel()
     x.create_user('try1', 'try@try.com1', '1234try')
