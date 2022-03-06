@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtGui import QIcon, QPixmap
+
 
 class Lon_in_ui(QDialog):
     def setupUi(self, Dialog):
@@ -27,59 +29,85 @@ class Lon_in_ui(QDialog):
         self.user_name.setGeometry(QtCore.QRect(80, 150, 140, 40))
         self.user_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.user_name.setObjectName("user_name")
+
         self.lineEdit_user_name = QtWidgets.QLineEdit(Dialog)
-        self.lineEdit_user_name.setGeometry(QtCore.QRect(80, 200, 461, 31))
+        self.lineEdit_user_name.setGeometry(QtCore.QRect(80, 200, 400, 31))
         self.lineEdit_user_name.setStyleSheet("border-radius: 15px;")
         self.lineEdit_user_name.setObjectName("lineEdit_user_name")
+
+
+
         self.user_name_2 = QtWidgets.QLabel(Dialog)
         self.user_name_2.setGeometry(QtCore.QRect(80, 260, 140, 40))
         self.user_name_2.setStyleSheet("color: rgb(255, 255, 255);")
         self.user_name_2.setObjectName("user_name_2")
-        self.lineEdit_user_name_2 = QtWidgets.QLineEdit(Dialog)
-        self.lineEdit_user_name_2.setGeometry(QtCore.QRect(80, 300, 461, 31))
-        self.lineEdit_user_name_2.setStyleSheet("border-radius: 15px;")
-        self.lineEdit_user_name_2.setObjectName("lineEdit_user_name_2")
+
+        self.lineEdit_password = QtWidgets.QLineEdit(Dialog)
+        self.lineEdit_password.setGeometry(QtCore.QRect(80, 300, 400, 31))
+        self.lineEdit_password.setStyleSheet("border-radius: 15px;")
+        self.lineEdit_password.setObjectName("lineEdit_user_name_2")
+
+
         self.pushButton_login = QtWidgets.QPushButton(Dialog)
         self.pushButton_login.setGeometry(QtCore.QRect(130, 380, 351, 41))
         self.pushButton_login.setStyleSheet("background-color: rgb(177, 223, 242);\n"
-"\n"
-"font: 75 14pt \"MS Shell Dlg 2\";\n"
-"border-radius: 15px;")
+                                            "\n"
+                                            "font: 75 14pt \"MS Shell Dlg 2\";\n"
+                                            "border-radius: 15px;")
         self.pushButton_login.setObjectName("pushButton_login")
         self.pushButton_singup = QtWidgets.QPushButton(Dialog)
         self.pushButton_singup.setGeometry(QtCore.QRect(90, 440, 211, 41))
         self.pushButton_singup.setStyleSheet("background-color: rgb(177, 223, 242);\n"
-"font: 75 14pt \"MS Shell Dlg 2\";\n"
-"border-radius: 15px;")
+                                             "font: 75 14pt \"MS Shell Dlg 2\";\n"
+                                             "border-radius: 15px;")
         self.pushButton_singup.setObjectName("pushButton_singup")
         self.pushButton_forgot_password = QtWidgets.QPushButton(Dialog)
         self.pushButton_forgot_password.setGeometry(QtCore.QRect(310, 440, 221, 41))
         self.pushButton_forgot_password.setStyleSheet("background-color: rgb(177, 223, 242);\n"
-"font: 75 14pt \"MS Shell Dlg 2\";\n"
-"border-radius: 15px;")
+                                                      "font: 75 14pt \"MS Shell Dlg 2\";\n"
+                                                      "border-radius: 15px;")
         self.pushButton_forgot_password.setObjectName("pushButton_forgot_password")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+        ########################################################################################
+        # my code
+        f = self.lineEdit_user_name.font()
+        f.setPointSize(17)  # sets the size to 27
+        self.lineEdit_user_name.setFont(f)
+        self.lineEdit_password.setFont(f)
+        ########################################################################################
+
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p><img src=\":/newPrefix/sing_up.png\"/></p></body></html>"))
-        self.welcome.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:48pt;\">WELCOME BACK!</span></p></body></html>"))
-        self.user_name.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:18pt;\">USER NAME</span></p></body></html>"))
-        self.user_name_2.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">PASSWORD</span></p></body></html>"))
-        self.pushButton_login.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">I\'m ready to go!</span></p></body></html>"))
+        #self.label.setText(
+        #    _translate("Dialog", "<html><head/><body><p><img src=\":/newPrefix/sing_up.png\"/></p></body></html>"))
+        pixmap = QPixmap('resources/ui_files/log in.png')
+        self.label.setPixmap(pixmap)
+        self.welcome.setText(_translate("Dialog",
+                                        "<html><head/><body><p><span style=\" font-size:48pt;\">WELCOME BACK!</span></p></body></html>"))
+        self.user_name.setText(_translate("Dialog",
+                                          "<html><head/><body><p><span style=\" font-size:18pt;\">USER NAME</span></p></body></html>"))
+        self.user_name_2.setText(_translate("Dialog",
+                                            "<html><head/><body><p><span style=\" font-size:16pt;\">PASSWORD</span></p></body></html>"))
+        self.pushButton_login.setWhatsThis(_translate("Dialog",
+                                                      "<html><head/><body><p><span style=\" font-size:16pt;\">I\'m ready to go!</span></p></body></html>"))
         self.pushButton_login.setText(_translate("Dialog", "I\'m ready to go!"))
-        self.pushButton_singup.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">I\'m ready to go!</span></p></body></html>"))
+        self.pushButton_singup.setWhatsThis(_translate("Dialog",
+                                                       "<html><head/><body><p><span style=\" font-size:16pt;\">I\'m ready to go!</span></p></body></html>"))
         self.pushButton_singup.setText(_translate("Dialog", "But this is my first time"))
-        self.pushButton_forgot_password.setWhatsThis(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">I\'m ready to go!</span></p></body></html>"))
+        self.pushButton_forgot_password.setWhatsThis(_translate("Dialog",
+                                                                "<html><head/><body><p><span style=\" font-size:16pt;\">I\'m ready to go!</span></p></body></html>"))
         self.pushButton_forgot_password.setText(_translate("Dialog", "What was that password?"))
-import resource_file
 
+
+import resource_file
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
     ui = Lon_in_ui()

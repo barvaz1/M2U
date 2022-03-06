@@ -4,7 +4,7 @@ from sqlite3 import Error
 db_file = r"Users.db"
 
 
-class controller_db:
+class Controller_db:
     def __init__(self):
 
         # create a database connection to a SQLite database
@@ -51,12 +51,24 @@ class controller_db:
         self.conn.commit()
 
         cur.close()
-        # cur.lastrowid
-        # return the name(cmd) and usrName
         return
+
+    def user_sing_up(self, data):
+        pass
+
+    def check_user_name(self, user_name):
+
+        # check if the user name existsin the data base
+
+        sql = """SELECT usrName FROM USERS WHERE usrName = '{}' LIMIT 1"""
+        sql = sql.format(user_name)
+        cur = self.conn.cursor()
+
+        if cur.execute(sql).fetchall():
+            return "user name exists"
 
 
 if __name__ == '__main__':
-    x = controller_db()
+    x = Controller_db()
     x.create_user_tabel()
-    x.create_user('try1', 'try@try.com1', '1234try')
+    print(x.user_sing_up({"user name": "moshe"}))

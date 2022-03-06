@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtGui import QIcon, QPixmap
 
 class Sign_up_ui(QDialog):
     def setupUi(self, Dialog):
@@ -27,7 +28,7 @@ class Sign_up_ui(QDialog):
         self.user_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.user_name.setObjectName("user_name")
         self.user_name_lineEdit = QtWidgets.QLineEdit(Dialog)
-        self.user_name_lineEdit.setGeometry(QtCore.QRect(80, 140, 461, 31))
+        self.user_name_lineEdit.setGeometry(QtCore.QRect(80, 140, 400, 31))
         self.user_name_lineEdit.setStyleSheet("border-radius: 15px;")
         self.user_name_lineEdit.setObjectName("user_name_3")
         self.user_name_2 = QtWidgets.QLabel(Dialog)
@@ -36,7 +37,7 @@ class Sign_up_ui(QDialog):
         self.user_name_2.setObjectName("user_name_2")
 
         self.password_line_edit = QtWidgets.QLineEdit(Dialog)
-        self.password_line_edit.setGeometry(QtCore.QRect(80, 280, 461, 31))
+        self.password_line_edit.setGeometry(QtCore.QRect(80, 280, 400, 31))
         self.password_line_edit.setStyleSheet("border-radius: 15px;")
         self.password_line_edit.setObjectName("password")
 
@@ -59,12 +60,12 @@ class Sign_up_ui(QDialog):
         self.user_name_4.setObjectName("user_name_4")
 
         self.email_line_edit = QtWidgets.QLineEdit(Dialog)
-        self.email_line_edit.setGeometry(QtCore.QRect(80, 210, 461, 31))
+        self.email_line_edit.setGeometry(QtCore.QRect(80, 210, 400, 31))
         self.email_line_edit.setStyleSheet("border-radius: 15px;")
         self.email_line_edit.setObjectName("password_2")
 
         self.password_2_line_edit = QtWidgets.QLineEdit(Dialog)
-        self.password_2_line_edit.setGeometry(QtCore.QRect(80, 340, 461, 31))
+        self.password_2_line_edit.setGeometry(QtCore.QRect(80, 340, 400, 31))
         self.password_2_line_edit.setStyleSheet("border-radius: 15px;")
         self.password_2_line_edit.setObjectName("password_3")
 
@@ -76,10 +77,24 @@ class Sign_up_ui(QDialog):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+        ########################################################################################
+        # my code
+        f = self.email_line_edit.font()
+        f.setPointSize(17)  # sets the size to 27
+        self.user_name_lineEdit.setFont(f)
+        self.email_line_edit.setFont(f)
+        self.password_line_edit.setFont(f)
+        self.password_2_line_edit.setFont(f)
+        ########################################################################################
+
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p><img src=\":/newPrefix/sing_up.png\"/></p></body></html>"))
+
+        #self.label.setText(_translate("Dialog", "<html><head/><body><p><img src=\":/newPrefix/sing_up.png\"/></p></body></html>"))
+        pixmap = QPixmap('resources/ui_files/log in.png')
+        self.label.setPixmap(pixmap)
+
         self.welcome.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:48pt;\">SIGN UP</span></p></body></html>"))
         self.user_name.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:18pt;\">USER NAME</span></p></body></html>"))
         self.user_name_2.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">PASSWORD</span></p></body></html>"))
@@ -89,7 +104,7 @@ class Sign_up_ui(QDialog):
         self.pushButton_return.setText(_translate("Dialog", "RETURN"))
         self.user_name_4.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">E - MAIL</span></p></body></html>"))
         self.user_name_5.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt;\">CONFIRM PASSWORD</span></p></body></html>"))
-import resource_file
+#import resource_file
 
 
 if __name__ == "__main__":
