@@ -54,10 +54,28 @@ class Controller_db:
         return
 
     def user_sing_up(self, data):
-        pass
+        data["success"] = False
+        if self.check_if_user_name_exists(data["user name"]):
+            data["user name"] = "user name exists"
 
-    def check_user_name(self, user_name):
+        elif self.check_if_email_exists(data['E-mail']):
+            data['E-mail'] = "Email exists"
 
+        else:
+            try:
+                self.create_user(data["user name"], data['E-mail'], data["password"])
+                data["success"] = True
+            except:
+                pass
+
+        return data
+
+
+        print("heyheyhey")
+        print(data)
+        return data
+
+    def check_if_user_name_exists(self, user_name):
         # check if the user name existsin the data base
 
         sql = """SELECT usrName FROM USERS WHERE usrName = '{}' LIMIT 1"""
@@ -65,10 +83,25 @@ class Controller_db:
         cur = self.conn.cursor()
 
         if cur.execute(sql).fetchall():
-            return "user name exists"
+            return True
+        else:
+            return False
+
+    def check_if_email_exists(self, user_name):
+        # check if the user name existsin the data base
+
+        sql = """SELECT usrEmail FROM USERS WHERE usrEmail = '{}' LIMIT 1"""
+        sql = sql.format(user_name)
+        cur = self.conn.cursor()
+
+        if cur.execute(sql).fetchall():
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
     x = Controller_db()
     x.create_user_tabel()
-    print(x.user_sing_up({"user name": "moshe"}))
+    print(x.user_sing_up({"user name": "moshe2",
+                          "user Email": "moshe@gmail.com2"}))

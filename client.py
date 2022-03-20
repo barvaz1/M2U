@@ -79,13 +79,22 @@ class Signup(Sign_up_ui, ):
         self.gotoLogin_signal.emit()
 
     def sign_up(self):
-        if self. check_input():
+        if self.check_input():
             self.signup_signal.emit({
                 "user name": self.user_name_lineEdit.text(),
                 "E-mail": self.email_line_edit.text(),
                 "password": self.password_line_edit.text(),
                 "password2": self.password_2_line_edit.text()
             })
+
+    def change_text_boxs(self, data):
+        print(data)
+        if data['user name']:
+            self.user_name_lineEdit.setText(data['user name'])
+        if data['E-mail']:
+            self.email_line_edit.setText(data['E-mail'])
+
+
 
     def check_input(self):
 
@@ -115,22 +124,22 @@ class Signup(Sign_up_ui, ):
         # user password
         if checkInput.check_password(self.password_line_edit.text()):
             self.password_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
-                                               "outset;border-width: 2px;")
+                                                  "outset;border-width: 2px;")
 
             temp += 1
         else:
             self.password_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
-                                               "outset;border-width: 2px;")
+                                                  "outset;border-width: 2px;")
 
         # user password 2
         if self.password_line_edit.text() == self.password_2_line_edit.text():
             self.password_2_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(124,252,0);border-style: "
-                                               "outset;border-width: 2px;")
+                                                    "outset;border-width: 2px;")
 
             temp += 1
         else:
             self.password_2_line_edit.setStyleSheet("border-radius: 15px;border-color: rgb(255,0,0);border-style: "
-                                               "outset;border-width: 2px;")
+                                                    "outset;border-width: 2px;")
 
         print(temp)
         return temp == 4
@@ -145,7 +154,7 @@ class Controller:
 
         self.show_login_screen()
 
-        self.socket_controller = Socket_controller()
+        self.socket_controller = Socket_controller(self)
 
     def show_signup_screen(self):
         #        if self.cur_screen:
@@ -167,17 +176,18 @@ class Controller:
         #################################################################
         # check staff
         #################################################################
-        # after check!
-        del data_dict["password2"]
-        data = "sign_up" + str(data_dict)
-        self.socket_controller.send_data(data)
+        if self.signup.check_input():
+            # after check!
+            del data_dict["password2"]
+            data = "sign_up" + str(data_dict)
+            self.socket_controller.send_data(data)
 
-        try:
-            print(ast.literal_eval(data[7:]))
+            try:
+                print(ast.literal_eval(data[7:]))
 
-        except Exception as e:
-            print(e.__str__())
-            raise
+            except Exception as e:
+                print(e.__str__())
+                raise
 
     def show_login_screen(self):
         try:
@@ -196,6 +206,27 @@ class Controller:
         self.login.gotoSignup_signal.connect(self.show_signup_screen)
 
         self.Dialog.show()
+
+    def handel_server_input(self, data):
+
+        print("handel_server_input")
+        ##################################
+        # in case of sign up
+        ##################################
+        if data[0:7] == "sign_up":
+            data = ast.literal_eval(data[7:])
+            print(data)
+
+            if data["success"]:
+                pass # move to chat window
+            else:
+                del data["password"]
+                del data["success"]
+                self.signup.change_text_boxs(data)
+
+
+
+
 
 
 if __name__ == "__main__":

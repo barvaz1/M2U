@@ -62,7 +62,7 @@ def main():
                     data = ast.literal_eval(data[7:])
                     print(data)
 
-                    controller_db.create_user(data["user name"], data["E-mail"], data["password"])
+                    messages_to_send.append((current_socket, "sign_up" + str(controller_db.user_sing_up(data))))
 
 
                 else:
